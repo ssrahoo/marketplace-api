@@ -1,0 +1,53 @@
+// https://dbdiagram.io/d
+// https://dbml.dbdiagram.io/docs
+
+Table user {
+  user_id uuid [primary key]
+  username string
+  email string
+  password string
+  wallet double
+  created timestamp
+  modified timestamp
+}
+
+Table buyer {buyer_id uuid [primary key]}
+Table seller {seller_id uuid [primary key]}
+
+Table product {
+  product_id uuid [primary key]
+  name string
+  unitPrice double 
+  stock integer
+  created timestamp
+  modified timestamp
+  seller_id uuid // FK
+}
+
+Table review {
+  review_id uuid [primary key]
+  rating integer
+  comment string
+  created timestamp
+  modified timestamp
+  buyer_id uuid //FK
+  product_id uuid //FK
+}
+
+Table transaction {
+  transaction_id uuid [primary key]
+  totalPrice double 
+  amout integer
+  created timestamp
+  modified timestamp
+  buyer_id uuid //FK
+  product_id uuid //FK
+}
+
+Ref: user.user_id - buyer.buyer_id //one-to-one
+Ref: user.user_id - seller.seller_id
+Ref: seller.seller_id < product.seller_id //one-to-many
+Ref: buyer.buyer_id < review.buyer_id
+Ref: product.product_id < review.product_id
+Ref: buyer.buyer_id < transaction.buyer_id
+Ref: product.product_id < transaction.product_id
