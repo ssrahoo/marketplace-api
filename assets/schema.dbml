@@ -2,46 +2,46 @@
 // https://dbml.dbdiagram.io/docs
 
 Table user {
-  user_id uuid [primary key]
-  username string
-  email string
-  password string
-  wallet double
-  created timestamp
-  modified timestamp
+  user_id UUID [primary key]
+  username String
+  email String
+  password String
+  wallet BigDecimal
+  created Instant
+  modified Instant
 }
 
-Table buyer {buyer_id uuid [primary key]}
-Table seller {seller_id uuid [primary key]}
+Table buyer {buyer_id UUID [primary key]}
+Table seller {seller_id UUID [primary key]}
 
 Table product {
-  product_id uuid [primary key]
-  name string
-  unitPrice double 
-  stock integer
-  created timestamp
-  modified timestamp
-  seller_id uuid // FK
+  product_id UUID [primary key]
+  name String
+  unitPrice BigDecimal 
+  stock Integer
+  created Instant
+  modified Instant
+  seller_id UUID // FK
 }
 
 Table review {
-  review_id uuid [primary key]
-  rating integer
-  comment string
-  created timestamp
-  modified timestamp
-  buyer_id uuid //FK
-  product_id uuid //FK
+  review_id UUID [primary key]
+  rating Integer
+  comment String
+  created Instant
+  modified Instant
+  buyer_id UUID //FK
+  product_id UUID //FK
 }
 
 Table transaction {
-  transaction_id uuid [primary key]
-  totalPrice double 
-  amout integer
-  created timestamp
-  modified timestamp
-  buyer_id uuid //FK
-  product_id uuid //FK
+  transaction_id UUID [primary key]
+  totalPrice BigDecimal 
+  amout Integer
+  created Instant
+  modified Instant
+  buyer_id UUID //FK
+  product_id UUID //FK
 }
 
 Ref: user.user_id - buyer.buyer_id //one-to-one
