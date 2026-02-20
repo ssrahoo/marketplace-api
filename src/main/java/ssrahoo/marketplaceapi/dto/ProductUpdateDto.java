@@ -1,6 +1,8 @@
 package ssrahoo.marketplaceapi.dto;
 
+import java.math.BigDecimal;
+
 public record ProductUpdateDto(
-        Double unitPrice,
+        BigDecimal unitPrice,
         Integer stock
 ) {}

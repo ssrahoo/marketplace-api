@@ -1,8 +1,10 @@
 package ssrahoo.marketplaceapi.dto;
 
+import java.math.BigDecimal;
+
 public record ProductRegistrationDto(
         String name,
-        Double unitPrice,
+        BigDecimal unitPrice,
         Integer stock
 ) {}
 

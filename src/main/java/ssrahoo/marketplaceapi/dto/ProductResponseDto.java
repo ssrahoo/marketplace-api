@@ -1,10 +1,11 @@
 package ssrahoo.marketplaceapi.dto;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public record ProductResponseDto(
         UUID productId,
         String name,
-        Double unitPrice,
+        BigDecimal unitPrice,
         Integer stock
 ) {}
