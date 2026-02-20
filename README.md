@@ -34,8 +34,7 @@ docker-compose up
 - For the complete list of endpoints refer to the table below.
 
 
-<details>
-  <summary><h2>Endpoints</h2></summary>
+## Endpoints
 
   Description|HTTP Request Method|Route|Example of JSON Body 
   :------------- | :------------- | :------------- | :-------------
@@ -59,7 +58,6 @@ docker-compose up
   | Update review by id |PUT| /review/{reviewId} | {"rating":5,"comment":"Really great product, loved it!"}
   | Delete review by id |DELETE| /review/{reviewId} |
   
-</details>
 
 ---
 
