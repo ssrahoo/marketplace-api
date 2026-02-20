@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class Product {
     private List<Review> reviews;
 
     private String name;
-    private Double unitPrice;
+    private BigDecimal unitPrice;
     private Integer stock;
 
     @CreationTimestamp
@@ -36,7 +37,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(UUID productId, Seller seller, String name, Double unitPrice, Integer stock, Instant created, Instant modified) {
+    public Product(UUID productId, Seller seller, String name, BigDecimal unitPrice, Integer stock, Instant created, Instant modified) {
         this.productId = productId;
         this.seller = seller;
         this.created = created;
@@ -80,11 +81,11 @@ public class Product {
         this.name = name;
     }
 
-    public Double getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Double unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

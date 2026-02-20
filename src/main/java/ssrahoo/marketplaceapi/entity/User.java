@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private Double wallet;
+    private BigDecimal wallet;
 
     //TODO: change wallet's data format to something other than double or float
 
@@ -45,7 +46,7 @@ public class User {
     public User(String username,
                 String email,
                 String password,
-                Double wallet,
+                BigDecimal wallet,
                 Instant created,
                 Instant modified) {
         this.username = username;
@@ -88,11 +89,11 @@ public class User {
         this.password = password;
     }
 
-    public Double getWallet() {
+    public BigDecimal getWallet() {
         return wallet;
     }
 
-    public void setWallet(Double wallet) {
+    public void setWallet(BigDecimal wallet) {
         this.wallet = wallet;
     }
 

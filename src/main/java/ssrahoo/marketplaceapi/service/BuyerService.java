@@ -10,6 +10,7 @@ import ssrahoo.marketplaceapi.dto.TransactionResponseDto;
 import ssrahoo.marketplaceapi.entity.*;
 import ssrahoo.marketplaceapi.repository.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -43,10 +44,10 @@ public class BuyerService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        double totalPrice = amount * product.getUnitPrice();
+        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(product.getUnitPrice()); // amount * unitPrice();
 
         //check if transaction is doable (i.e., buyer having enough funds and stock >= amount)
-        if (buyer.getUser().getWallet() < totalPrice)
+        if (buyer.getUser().getWallet().compareTo(totalPrice) < 0) // if wallet < totalPrice
             return false;
 
         if (product.getStock() < amount || amount < 1)
@@ -54,10 +55,10 @@ public class BuyerService {
 
         // update buyer and seller wallets
         User buyerUser = buyer.getUser();
-        buyerUser.setWallet(buyerUser.getWallet() - totalPrice);
+        buyerUser.setWallet(buyerUser.getWallet().subtract(totalPrice));
 
         User sellerUser = product.getSeller().getUser();
-        sellerUser.setWallet(sellerUser.getWallet() + totalPrice);
+        sellerUser.setWallet(sellerUser.getWallet().add(totalPrice));
 
         // update product stock
         product.setStock(product.getStock() - amount);

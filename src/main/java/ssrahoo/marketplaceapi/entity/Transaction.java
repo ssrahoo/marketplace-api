@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -23,7 +24,7 @@ public class Transaction {
     private Product product;
 
     private Integer amount;
-    private double totalPrice;
+    private BigDecimal totalPrice;
 
 
     @CreationTimestamp
@@ -35,7 +36,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(TransactionId id, Buyer buyer, Product product, Integer amount, double totalPrice, Instant created, Instant modified) {
+    public Transaction(TransactionId id, Buyer buyer, Product product, Integer amount, BigDecimal totalPrice, Instant created, Instant modified) {
         this.id = id;
         this.buyer = buyer;
         this.product = product;
@@ -79,11 +80,11 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
