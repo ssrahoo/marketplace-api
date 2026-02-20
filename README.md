@@ -66,5 +66,5 @@ docker-compose up
 ## Database Structure
 
 | ![](assets/dbdiagram.io.jpg) | 
-
+|:--:| 
 
