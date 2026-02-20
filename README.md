@@ -69,13 +69,3 @@ docker-compose up
 |:--:| 
 | *Database structure* |
 
----
-
-## 🗺️ Roadmap / TODO
- Change monetary values to BigDecimal
- 
----
-
-## 🤝 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
-
