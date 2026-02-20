@@ -1,4 +1,4 @@
-![marketplace-api](img/marketplace-api.jpg)
+![marketplace-api](assets/marketplace-api.jpg)
 
 ---
 
