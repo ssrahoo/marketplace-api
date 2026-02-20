@@ -2,23 +2,23 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This fully functional **RESTful backend** serves e-commerce applications. Designed with modern software engineering principles and built with **Spring Boot**, it provides robust API endpoints for managing users, products, transactions, and reviews, as well as with data persistence and test coverage.
 
 ---
 
-## 🚀 Features
+## Features
 
-✅ **Core E-Commerce Functionality** – Full suite of backend features including role-based user access (buyer/seller), management of product and transactions, and reviews with support for ratings and comments  
-✅ **Data Persistence** – MySQL integration with JPA & Hibernate  
-✅ **Robust Architecture** – Controller-Service-Repository layered pattern  
-✅ **Unit & Integration Tests** – JUnit & Mockito-based test suite  
-✅ **Containerized** – Docker-ready  
+- **Core E-Commerce Functionality** – Full suite of RESTful backend features including role-based user access (buyer/seller), management of product and transactions, and reviews with support for ratings and comments  
+- **Data Persistence** – MySQL integration with JPA & Hibernate  
+- **Robust Architecture** – Controller-Service-Repository layered pattern  
+- **Unit & Integration Tests** – JUnit & Mockito-based test suite  
+- **Containerized** – Docker-ready  
 
 ---
 
-## 📦 Installation & Usage
+## Installation & Usage
 
 ## Usage
 - Ensure Docker is installed and running, then:
@@ -63,9 +63,8 @@ docker-compose up
 
 ---
 
-## 📸 Screenshots
+## Database Structure
 
 | ![](assets/dbdiagram.io.jpg) | 
-|:--:| 
-| *Database structure* |
+
 
