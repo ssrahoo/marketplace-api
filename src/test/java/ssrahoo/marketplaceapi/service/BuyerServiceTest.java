@@ -202,7 +202,7 @@ class BuyerServiceTest {
                     "buyername",
                     "buyeremail",
                     "buyerpassword",
-                    BigDecimal.valueOf(500.0),
+                    BigDecimal.valueOf(1000.0),
                     Instant.now(),
                     null
             ));
@@ -295,6 +295,7 @@ class BuyerServiceTest {
             assertEquals(buyerId, uuidArgumentCaptor.getAllValues().get(0));
             assertEquals(UUID.fromString(transactionRegistrationDto.productId()), uuidArgumentCaptor.getAllValues().get(1));
         }
+
 
 
         @Test
