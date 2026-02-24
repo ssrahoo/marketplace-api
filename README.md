@@ -14,7 +14,7 @@ This fully functional **RESTful backend** serves e-commerce applications. Design
 - **Data Persistence** – MySQL integration with JPA & Hibernate  
 - **Robust Architecture** – Controller-Service-Repository layered pattern  
 - **Unit & Integration Tests** – JUnit & Mockito-based test suite  
-- **Containerized** – Docker-ready  
+- **Containerized** – Docker-ready with multi-stage Docker builds for optimized production images
 
 ---
 
@@ -26,9 +26,8 @@ This fully functional **RESTful backend** serves e-commerce applications. Design
 cd marketplace-api
 ```
 ```bash
-docker-compose up
+docker compose up --build
 ```
-- Open the project using an IDE (e.g., IntelliJ) and run it.
 - Make HTTP requests (e.g., POST http://localhost:8080/user) with the necessary parameters (e.g., Body={"username":"test", "email":"test@email.com", "password":"test123", "wallet":0.0 })
 - Note: Foreign key constraints apply when deleting entries.
 - For the complete list of endpoints refer to the table below.
