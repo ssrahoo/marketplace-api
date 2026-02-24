@@ -4,9 +4,34 @@ services:
     ports:
       - '3306:3306'
     environment:
-      - 'MYSQL_DATABASE=marketplacedb'
-      - 'MYSQL_USER=admin'
-      - 'MYSQL_PASSWORD=123'
-      - 'MYSQL_ROOT_PASSWORD=root'
+      - 'MYSQL_DATABASE=${DATASOURCE_DATABASE}'
+      - 'MYSQL_USER=${DATASOURCE_USERNAME}'
+      - 'MYSQL_PASSWORD=${DATASOURCE_PASSWORD}'
+      - 'MYSQL_ROOT_PASSWORD=${DATASOURCE_ROOT_PASSWORD}'
     expose:
       - '3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+
+  app:
+    build: .
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    environment:
+      - 'SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/${DATASOURCE_DATABASE}'
+      - 'SPRING_DATASOURCE_USERNAME=${DATASOURCE_USERNAME}'
+      - 'SPRING_DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      retries: 5
+
+volumes:
+  mysql_data:
+
