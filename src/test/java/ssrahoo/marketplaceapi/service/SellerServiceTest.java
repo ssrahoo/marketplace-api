@@ -16,6 +16,7 @@ import ssrahoo.marketplaceapi.entity.User;
 import ssrahoo.marketplaceapi.repository.ProductRepository;
 import ssrahoo.marketplaceapi.repository.SellerRepository;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,7 +53,7 @@ class SellerServiceTest {
             UUID sellerId = UUID.randomUUID();
             ProductRegistrationDto productRegistrationDto = new ProductRegistrationDto(
                     "productRegistrationDto name",
-                    100.0,
+                    BigDecimal.valueOf(100.0),
                     1
             );
 
@@ -61,7 +62,7 @@ class SellerServiceTest {
                             "seller username",
                             "seller email",
                             "seller password",
-                            0.0,
+                            BigDecimal.valueOf(0.0),
                             Instant.now(),
                             null
                     )

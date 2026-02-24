@@ -10,6 +10,7 @@ import ssrahoo.marketplaceapi.dto.TransactionRegistrationDto;
 import ssrahoo.marketplaceapi.entity.*;
 import ssrahoo.marketplaceapi.repository.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,7 +63,7 @@ class BuyerServiceTest {
                     "buyername",
                     "buyeremail",
                     "buyerpassword",
-                    500.0,
+                    BigDecimal.valueOf(500.0),
                     Instant.now(),
                     null
             ));
@@ -75,19 +76,19 @@ class BuyerServiceTest {
                             "sellername",
                             "selleremail",
                             "sellerpassword",
-                            500.0,
+                            BigDecimal.valueOf(500.0),
                             Instant.now(),
                             null
                     )),
                     "productname",
-                    100.0,
+                    BigDecimal.valueOf(0.0),
                     1,
                     Instant.now(),
                     null
             );
 
-            double buyerWalletBefore = buyer.getUser().getWallet();
-            double sellerWalletBefore = product.getSeller().getUser().getWallet();
+            BigDecimal buyerWalletBefore = buyer.getUser().getWallet();
+            BigDecimal sellerWalletBefore = product.getSeller().getUser().getWallet();
             int productStockBefore = product.getStock();
 
             var buyerId = UUID.randomUUID();
@@ -96,7 +97,7 @@ class BuyerServiceTest {
                     1
             );
 
-            double totalPrice = product.getUnitPrice() * transactionRegistrationDto.amount();
+            BigDecimal totalPrice = product.getUnitPrice().multiply(BigDecimal.valueOf(transactionRegistrationDto.amount()));
 
             doReturn(Optional.of(buyer)).when(buyerRepository).findById(uuidArgumentCaptor.capture());
             doReturn(Optional.of(product)).when(productRepository).findById(uuidArgumentCaptor.capture());
@@ -119,13 +120,13 @@ class BuyerServiceTest {
             assertEquals(totalPrice, transactionArgumentCaptor.getValue().getTotalPrice());
 
             assertEquals(
-                    - totalPrice,
-                    buyer.getUser().getWallet() - buyerWalletBefore
+                    totalPrice.negate(),
+                    buyer.getUser().getWallet().subtract(buyerWalletBefore)
             );
 
             assertEquals(
                     totalPrice,
-                    product.getSeller().getUser().getWallet() - sellerWalletBefore
+                    product.getSeller().getUser().getWallet().subtract(sellerWalletBefore)
             );
 
             assertEquals(

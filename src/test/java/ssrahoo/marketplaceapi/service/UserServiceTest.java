@@ -16,6 +16,7 @@ import ssrahoo.marketplaceapi.repository.BuyerRepository;
 import ssrahoo.marketplaceapi.repository.SellerRepository;
 import ssrahoo.marketplaceapi.repository.UserRepository;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ class UserServiceTest {
                     "x",
                     "email",
                     "password",
-                    0.0,
+                    BigDecimal.valueOf(0.0),
                     Instant.now(),
                     null
             );
@@ -71,7 +72,7 @@ class UserServiceTest {
                     "y",
                     "email",
                     "password",
-                    0.0
+                    BigDecimal.valueOf(0.0)
             );
 
             UUID uuid = UUID.randomUUID();
@@ -102,7 +103,7 @@ class UserServiceTest {
                     "y",
                     "email",
                     "password",
-                    0.0
+                    BigDecimal.valueOf(0.0)
             );
 
             doThrow(new RuntimeException()).when(userRepository).save(userArgumentCaptor.capture());
@@ -152,7 +153,7 @@ class UserServiceTest {
                     "x",
                     "email",
                     "password",
-                    0.0,
+                    BigDecimal.valueOf(0.0),
                     Instant.now(),
                     null
             );
@@ -207,7 +208,7 @@ class UserServiceTest {
                     "x",
                     "email",
                     "password",
-                    0.0,
+                    BigDecimal.valueOf(0.0),
                     Instant.now(),
                     null
             );
@@ -215,7 +216,7 @@ class UserServiceTest {
             UserUpdateDto userUpdateDto = new UserUpdateDto(
                     "y",
                     "password",
-                    0.0
+                    BigDecimal.valueOf(0.0)
             );
 
             doReturn(Optional.of(user)).when(userRepository).findById(uuidArgumentCaptor.capture());
@@ -243,7 +244,7 @@ class UserServiceTest {
             UserUpdateDto userUpdateDto = new UserUpdateDto(
                     "y",
                     "password",
-                    0.0
+                    BigDecimal.valueOf(0.0)
             );
 
             doReturn(Optional.empty()).when(userRepository).findById(uuidArgumentCaptor.capture());
