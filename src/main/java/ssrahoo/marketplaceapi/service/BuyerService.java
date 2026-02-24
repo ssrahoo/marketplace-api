@@ -50,7 +50,10 @@ public class BuyerService {
         if (buyer.getUser().getWallet().compareTo(totalPrice) < 0) // if wallet < totalPrice
             return false;
 
-        if (product.getStock() < amount || amount < 1)
+        if (product.getStock() < amount)
+            return false;
+
+        if(amount < 1)
             return false;
 
         // update buyer and seller wallets

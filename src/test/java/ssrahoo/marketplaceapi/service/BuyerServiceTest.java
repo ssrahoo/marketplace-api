@@ -60,6 +60,8 @@ class BuyerServiceTest {
     @Captor
     ArgumentCaptor<Transaction> transactionArgumentCaptor;
 
+    /* saveTransaction - legacy
+
     @Nested
     class saveTransaction{
         @Test
@@ -202,7 +204,7 @@ class BuyerServiceTest {
                     "buyername",
                     "buyeremail",
                     "buyerpassword",
-                    BigDecimal.valueOf(500.0),
+                    BigDecimal.valueOf(1000.0),
                     Instant.now(),
                     null
             ));
@@ -297,6 +299,7 @@ class BuyerServiceTest {
         }
 
 
+
         @Test
         @DisplayName("METHOD saveTransaction SHOULD throw exception WHEN buyer id is not found.")
         void shouldThrowException_whenBuyerIdIsNotFound(){
@@ -356,6 +359,120 @@ class BuyerServiceTest {
             assertThrows(ResponseStatusException.class, () -> buyerService.saveTransaction(buyerId, transactionRegistrationDto));
         }
 
+    }
+
+    */
+
+    // saveTransaction - cleaner version
+    @Nested
+    class saveTransaction{
+        private UUID buyerId;
+        private UUID productId;
+        private Buyer buyer;
+        private Product product;
+        private User buyerUser;
+        private User sellerUser;
+
+        @BeforeEach
+        void setUp() {
+            MockitoAnnotations.openMocks(this);
+            buyerId = UUID.randomUUID();
+            productId = UUID.randomUUID();
+            initUsers();
+            initBuyer();
+            initProduct();
+        }
+
+        private void initUsers() {
+            buyerUser = new User();
+            buyerUser.setWallet(BigDecimal.valueOf(1000));
+
+            sellerUser = new User();
+            sellerUser.setWallet(BigDecimal.valueOf(500));
+        }
+
+        private void initBuyer() {
+            buyer = new Buyer();
+            buyer.setBuyerId(buyerId);
+            buyer.setUser(buyerUser);
+        }
+
+        private void initProduct() {
+            product = new Product();
+            product.setProductId(productId);
+            product.setUnitPrice(BigDecimal.valueOf(50));
+            product.setStock(10);
+            product.setSeller(new Seller(sellerUser));
+        }
+
+        private TransactionRegistrationDto createDto(int amount) {
+            return new TransactionRegistrationDto(productId.toString(), amount);
+        }
+
+        private void mockRepositories(Optional<Buyer> buyerOpt, Optional<Product> productOpt) {
+            when(buyerRepository.findById(buyerId)).thenReturn(buyerOpt);
+            when(productRepository.findById(productId)).thenReturn(productOpt);
+        }
+
+        @Test
+        void testBuyerNotFound() {
+            when(buyerRepository.findById(buyerId)).thenReturn(Optional.empty());
+
+            assertThrows(ResponseStatusException.class,
+                    () -> buyerService.saveTransaction(buyerId, createDto(2)));
+        }
+
+        @Test
+        void testProductNotFound() {
+            mockRepositories(Optional.of(buyer), Optional.empty());
+
+            assertThrows(ResponseStatusException.class,
+                    () -> buyerService.saveTransaction(buyerId, createDto(2)));
+        }
+
+        @Test
+        void testInsufficientFunds() {
+            buyerUser.setWallet(BigDecimal.valueOf(50)); // less than totalPrice
+            mockRepositories(Optional.of(buyer), Optional.of(product));
+
+            boolean result = buyerService.saveTransaction(buyerId, createDto(2));
+            assertFalse(result);
+        }
+
+        @Test
+        void testInsufficientStock() {
+            mockRepositories(Optional.of(buyer), Optional.of(product));
+            // amount > stock
+            assertFalse(buyerService.saveTransaction(buyerId, createDto(20)));
+        }
+
+        @Test
+        void testInvalidAmount() {
+            mockRepositories(Optional.of(buyer), Optional.of(product));
+            // amount < 1
+            assertFalse(buyerService.saveTransaction(buyerId, createDto(0)));
+        }
+
+        @Test
+        void testSuccessfulTransaction() {
+            mockRepositories(Optional.of(buyer), Optional.of(product));
+
+            boolean result = buyerService.saveTransaction(buyerId, createDto(5));
+            assertTrue(result);
+
+            // Verify wallet updates
+            assertEquals(BigDecimal.valueOf(750), buyerUser.getWallet());
+            assertEquals(BigDecimal.valueOf(750), sellerUser.getWallet());
+
+            // Verify stock update
+            assertEquals(5, product.getStock());
+
+            // Verify repositories are called
+            verify(userRepository).save(buyerUser);
+            verify(userRepository).save(sellerUser);
+            verify(productRepository).save(product);
+            verify(buyerProductRepository).save(any(Transaction.class));
+        }
     }
 
     @Nested
