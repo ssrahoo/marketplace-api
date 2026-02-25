@@ -236,6 +236,44 @@ class UserServiceTest {
 
         }
 
+        @DisplayName("METHOD updateById SHOULD update user WHEN it exists and required data is null")
+        @Test
+        void shouldUpdateUser_whenItExistsAndRequiredDataIsNull() {
+            // arrange
+            UUID id = UUID.randomUUID();
+            User user = new User(
+                    "x",
+                    "email",
+                    "password",
+                    BigDecimal.valueOf(0.0),
+                    Instant.now(),
+                    null
+            );
+
+            UserUpdateDto userUpdateDto = new UserUpdateDto(
+                    null,
+                    null,
+                    null
+            );
+
+            doReturn(Optional.of(user)).when(userRepository).findById(uuidArgumentCaptor.capture());
+            doReturn(user).when(userRepository).save(userArgumentCaptor.capture());
+
+            // act
+            userService.updateById(id, userUpdateDto);
+
+            // assert
+            assertEquals(id, uuidArgumentCaptor.getValue());
+            assertNotNull(userArgumentCaptor.getValue().getUsername());
+            assertNotNull(userArgumentCaptor.getValue().getPassword());
+            assertNotNull(userArgumentCaptor.getValue().getWallet());
+
+            verify(userRepository, times(1)).findById(uuidArgumentCaptor.getValue());
+            verify(userRepository, times(1)).save(userArgumentCaptor.getValue());
+
+        }
+
+
         @DisplayName("METHOD updateById SHOULD not update user WHEN it does not exist")
         @Test
         void shouldNotUpdateUser_whenItDoesNotExist() {
