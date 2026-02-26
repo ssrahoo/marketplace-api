@@ -1,5 +1,7 @@
 package ssrahoo.marketplaceapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ssrahoo.marketplaceapi.dto.ProductResponseDto;
 import ssrahoo.marketplaceapi.dto.ProductUpdateDto;
@@ -13,6 +15,8 @@ import java.util.UUID;
 
 @Service
 public class ProductService {
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
+
     private ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -52,6 +56,8 @@ public class ProductService {
 
     // update
     public void updateById(UUID id, ProductUpdateDto productUpdateDto){
+        logger.debug("Updating product productId={}", id);
+
         var result = productRepository.findById(id);
 
         if (result.isPresent()) {
@@ -67,13 +73,20 @@ public class ProductService {
 
             product.setModified(Instant.now());
             productRepository.save(product);
+            logger.info("Product updated productId={}", id);
+        }else{
+            logger.warn("Attempted to update non-existing product productId={}", id);
         }
     }
 
     // delete
     public void deleteById(UUID id){
+        logger.debug("Deleting product productId={}", id);
         if(productRepository.existsById(id)){
             productRepository.deleteById(id);
+            logger.info("Product deleted productId={}", id);
+        }else{
+            logger.warn("Attempted to delete non-existing product productId={}", id);
         }
     }
 

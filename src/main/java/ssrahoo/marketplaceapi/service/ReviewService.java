@@ -1,7 +1,8 @@
 package ssrahoo.marketplaceapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ssrahoo.marketplaceapi.dto.ProductResponseDto;
 import ssrahoo.marketplaceapi.dto.ReviewResponseDto;
 import ssrahoo.marketplaceapi.dto.ReviewUpdateDto;
 import ssrahoo.marketplaceapi.entity.Review;
@@ -14,6 +15,8 @@ import java.util.UUID;
 
 @Service
 public class ReviewService {
+    private static final Logger logger = LoggerFactory.getLogger(ReviewService.class);
+
     private ReviewRepository reviewRepository;
 
     public ReviewService(ReviewRepository reviewRepository) {
@@ -51,6 +54,8 @@ public class ReviewService {
 
     // update
     public void updateById(UUID id, ReviewUpdateDto reviewUpdateDto){
+        logger.debug("Updating review reviewId={}", id);
+
         var result = reviewRepository.findById(id);
 
         if (result.isPresent()) {
@@ -66,13 +71,21 @@ public class ReviewService {
 
             review.setModified(Instant.now());
             reviewRepository.save(review);
+            logger.info("Review updated reviewId={}", id);
+        }else{
+            logger.warn("Attempted to update non-existing review reviewId={}", id);
         }
     }
 
     // delete
     public void deleteById(UUID id){
+        logger.debug("Deleting review reviewId={}", id);
+
         if(reviewRepository.existsById(id)){
             reviewRepository.deleteById(id);
+            logger.info("Review deleted reviewId={}", id);
+        }else{
+            logger.warn("Attempted to delete non-existing review reviewId={}", id);
         }
     }
 

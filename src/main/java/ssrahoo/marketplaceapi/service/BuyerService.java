@@ -1,5 +1,7 @@
 package ssrahoo.marketplaceapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class BuyerService {
+    private static final Logger logger = LoggerFactory.getLogger(BuyerService.class);
 
     private BuyerRepository buyerRepository;
     private UserRepository userRepository;
@@ -35,6 +38,8 @@ public class BuyerService {
     }
 
     public boolean saveTransaction(UUID buyerId, TransactionRegistrationDto transactionRegistrationDto) {
+        logger.debug("Registering transaction");
+
         UUID productId = UUID.fromString(transactionRegistrationDto.productId());
         Integer amount = transactionRegistrationDto.amount();
 
@@ -84,6 +89,7 @@ public class BuyerService {
         productRepository.save(product);
         buyerProductRepository.save(transaction);
 
+        logger.info("Transaction registered transactionId={}", id);
         return true;
     }
 
@@ -106,6 +112,8 @@ public class BuyerService {
     }
 
     public void saveReview(UUID buyerId, UUID productId, ReviewRegistrationDto reviewRegistrationDto) {
+        logger.debug("Registering review");
+
         var buyer = buyerRepository.findById(buyerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -122,6 +130,8 @@ public class BuyerService {
                 null
         );
         var id = reviewRepository.save(review).getReviewId();
+
+        logger.info("Review registered reviewId={}", id);
     }
 
     public List<ReviewResponseDto> findAllReviews(UUID buyerId, UUID productId) {
