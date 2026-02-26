@@ -1,5 +1,7 @@
 package ssrahoo.marketplaceapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 @Service
 public class SellerService {
+    private static final Logger logger = LoggerFactory.getLogger(SellerService.class);
 
     private SellerRepository sellerRepository;
     private ProductRepository productRepository;
@@ -25,6 +28,8 @@ public class SellerService {
     }
 
     public void saveProduct(UUID sellerId, ProductRegistrationDto productRegistrationDto){
+        logger.debug("Registering product");
+
         var seller = sellerRepository.findById(sellerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -38,7 +43,10 @@ public class SellerService {
                 null
         );
         var id = productRepository.save(product).getProductId();
+
+        logger.info("Product registered productId={}", id);
     }
+
 
     public List<ProductResponseDto> findAllProducts(UUID sellerId){
         var seller = sellerRepository.findById(sellerId)

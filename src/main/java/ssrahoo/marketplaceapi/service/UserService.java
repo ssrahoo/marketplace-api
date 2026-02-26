@@ -1,5 +1,7 @@
 package ssrahoo.marketplaceapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ssrahoo.marketplaceapi.dto.UserRegistrationDto;
 import ssrahoo.marketplaceapi.dto.UserUpdateDto;
@@ -11,13 +13,14 @@ import ssrahoo.marketplaceapi.repository.SellerRepository;
 import ssrahoo.marketplaceapi.repository.UserRepository;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     private UserRepository userRepository;
     private BuyerRepository buyerRepository;
     private SellerRepository sellerRepository;
@@ -31,6 +34,8 @@ public class UserService {
 
     // create
     public UUID save(UserRegistrationDto userRegistrationDto){
+        logger.debug("Registering user");
+
         var user = new User(
             userRegistrationDto.username(),
             userRegistrationDto.email(),
@@ -46,6 +51,7 @@ public class UserService {
         buyerRepository.save(new Buyer(user));
         sellerRepository.save(new Seller(user));
 
+        logger.info("User registered userId={}", id);
         return id;
     }
 
@@ -61,6 +67,8 @@ public class UserService {
 
     // update
     public void updateById(UUID id, UserUpdateDto userUpdateDto){
+        logger.debug("Updating user userId={}", id);
+
         var result = userRepository.findById(id);
 
         if (result.isPresent()) {
@@ -79,16 +87,25 @@ public class UserService {
             }
 
             user.setModified(Instant.now());
+
             userRepository.save(user); // references to user in buyerRepository and sellerRepository are also updated
+            logger.info("User updated userId={}", id);
+        }else{
+            logger.warn("Attempted to update non-existing user userId={}", id);
         }
     }
 
     // delete
     public void deleteById(UUID id){
+        logger.debug("Deleting user userId={}", id);
+
         if(userRepository.existsById(id)){
             buyerRepository.deleteById(id);
             sellerRepository.deleteById(id);
             userRepository.deleteById(id);
+            logger.info("User deleted userId={}", id);
+        }else{
+            logger.warn("Attempted to delete non-existing user userId={}", id);
         }
     }
 

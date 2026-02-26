@@ -14,6 +14,7 @@ This fully functional **RESTful backend** serves e-commerce applications. Design
 - **Data Persistence** – MySQL integration with JPA & Hibernate  
 - **Robust Architecture** – Controller-Service-Repository layered pattern  
 - **Unit & Integration Tests** – JUnit & Mockito-based test suite  
+- **Structured Logging** – Service-layer logging with level-based event tracking to improve traceability, debugging, and monitoring
 - **Containerized** – Docker-ready with multi-stage Docker builds for optimized production images
 
 ---
